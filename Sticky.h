@@ -15,6 +15,9 @@ class Sticky
 {
 private:
     static Texture2D notepic;
+    Texture2D corkboard;
+
+    RenderTexture2D noteimage;
     
     
     struct notestruct
@@ -39,6 +42,8 @@ public:
     ~Sticky();
 
     void draw();
+
+    void savetoRender();
 
 };
 

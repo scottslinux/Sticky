@@ -37,5 +37,4 @@ int main()
     CloseAudioDevice();
 
     return 0;
-    
 }

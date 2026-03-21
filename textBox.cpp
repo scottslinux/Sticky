@@ -11,17 +11,18 @@ using namespace std;
 
 
 //*******************************************
-TextBox::TextBox() : TextBox({10,4},{120,120},30) {}
+TextBox::TextBox() : TextBox({11,4},{120,100},45) {}
 //*******************************************
 TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
 {
-    MonoFont=LoadFontEx("./resources/comicmono.otf",50,NULL,0);
+    MonoFont=LoadFontEx("./resources/marker.ttf",50,NULL,0);
     fontsize=fntsz;
+    cursorpixxy={0,0};     
     
     boxposition=screenpos;
     boxdimen=chrdim;    //set the dimensions in chars (vector2)
 
-    string test="A";
+    string test="W";
     boxpixels=MeasureTextEx(MonoFont,test.c_str(),fntsz,0);
     fontwidth=boxpixels.x;
     fontheight=boxpixels.y*.85; //correct for the monospace too tall oddity
@@ -65,21 +66,24 @@ void TextBox::update()
 //*******************************************
 void TextBox::draw()
 {
-    DrawRectangleLinesEx({boxposition.x-fontwidth,(float)boxposition.y-fontheight*.5,
-            (float)boxpixels.x+fontwidth*2.5,boxpixels.y+fontwidth*2},2,YELLOW);
+    DrawRectangleLinesEx({boxposition.x,(float)boxposition.y-fontheight*.5,
+            (float)boxpixels.x*.6,boxpixels.y+fontwidth*2},1,BLUE);
 
     
         int row=0,col=0;
-        int charindex=0;       
+        int charindex=0;  
+        
         
         tempstring=text;    //transfer the contents to keep the original info intact
         tempstring=wrapper(tempstring,boxdimen.x);
 
 
-
+        float fontposx=0;   //start off on the left margin
+        string prevchar="";
 
         for(char c:tempstring)        //iterate thru the string 
         {
+
             
             {
                 //  add the character input to a string for display
@@ -88,16 +92,28 @@ void TextBox::draw()
                     //cout<<"I see the carriage return!!!!";
                     col=-1;
                     row++;
-                    //break;
+                    prevchar="";    //ON A NEW LINE...don't need leading spaces
+
+                    fontposx=0; //reset character position to left margin
+                    
 
 
                 }
 
 
                 string a;
+                
                 a+=c;   //convert the character into a string
-                DrawTextEx(MonoFont,a.c_str(),{boxposition.x+(col*fontwidth),boxposition.y+(row*fontheight)},fontsize,0,BLACK);
+
+                fontposx+=MeasureTextEx(MonoFont,prevchar.c_str(),fontsize,0).x;   //tally up the spacing in realtime
+
+
+                DrawTextEx(MonoFont,a.c_str(),{boxposition.x+(fontposx),boxposition.y+(row*fontheight)},fontsize,0,BLACK);
                 col++;
+
+                cursorpixxy={boxposition.x+(fontposx),boxposition.y+(row*fontheight)};
+
+                prevchar=a; //save the previous character for spacing
 
                 
             }
@@ -108,10 +124,10 @@ void TextBox::draw()
         
 
 
-        Vector2 rec=rc_xy({col,row});
-        drawCursor(rec.x,rec.y);
+        
+        drawCursor(0,0);
 
-        cout<<tempstring<<endl;
+        //cout<<tempstring<<endl;
 
    
 }
@@ -119,23 +135,13 @@ void TextBox::draw()
 
 
 //*******************************************
-//row,column to pixel xy  ---return the pixel location for a row,col character spot
-Vector2 TextBox::rc_xy(Vector2 rc)
-{
-    Vector2 pixelxy={boxposition.x+rc.x*fontwidth, boxposition.y+rc.y*fontheight};
 
-    
-    //cout<<pixelxy.x<<" , "<<pixelxy.y<<endl;
-
-
-
-
-    return pixelxy;
-}
-//*******************************************
 void TextBox::getSomeKeyStrokes()
 {   
     //thanks Copilot--add the keystrokes to the string text
+
+
+    
 
     int key = GetCharPressed();
 
@@ -181,18 +187,18 @@ void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
     switch (cursorblink)
     {
     case true:
-        curscolor=Color{255,255,255,220};
+        curscolor=Color{0,0,0,220};
 
         break;
     case false:
-        curscolor=Color{255,255,255,100};
+        curscolor=Color{0,0,0,10};
         break;
     
     default:
         break;
     }
 
-    DrawRectangle(x,y,fontwidth,fontheight,curscolor);  //and there you go....
+    DrawRectangle(cursorpixxy.x+fontwidth/1.5,cursorpixxy.y,fontwidth/3,fontheight,curscolor);  //and there you go....
 
 }
 
@@ -260,13 +266,17 @@ string TextBox::wrapper(string workingstr,int width)
 
 
         }
+        
+        cout<<lines<<endl;
+
+
+    
         charcount++;    //increment to the next character in the string
     }
+   
+
     
-    cout<<"             SUCCESS!!!!!!\n";
-    cout<<"\nIn the function wrapper..."<<changes<<" changes were made.\n";
-    cout<<"The text was wrapped to a width of "<<width<<" characters.";
-    cout<<"the string was "<<workingstr.length()<<" characters long.\n\n";
+
 
     return workingstr;
 }

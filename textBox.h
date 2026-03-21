@@ -21,6 +21,7 @@ private:
     Vector2 boxdimen;           //horizontal x vertical character counts
     Vector2 boxpixels;          //corresponding pixel dimensions
     Vector2 boxposition;        //position on the screen x,y
+    Vector2 cursorpixxy;
 
     float cursortimer=0;
 
@@ -54,4 +55,5 @@ public:
     void getSomeKeyStrokes();
     void drawCursor(float col,float row);
     string wrapper(string workingstr,int width);
+
 };
