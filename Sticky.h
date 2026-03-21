@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include <vector>
 #include "textBox.h"
+#include "Button.h"
 
 using namespace std;
 
@@ -16,8 +17,12 @@ class Sticky
 private:
     static Texture2D notepic;
     Texture2D corkboard;
+    Texture2D buttonup;
+    Texture2D buttondown;
 
     RenderTexture2D noteimage;
+
+    Button mybutton;
     
     
     struct notestruct
@@ -30,9 +35,16 @@ private:
     };
     
     vector<notestruct> notelist;
+    vector<RenderTexture2D> ImageList;
 
-    enum class state_{idle,creating,deleting};
-    state_ state=state_::creating;
+
+    //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
+    enum class state_{initialize,idle,creating,deleting};
+
+    state_ state=state_::initialize;
+    
+    
+    
     TextBox inputbox;
 
 
