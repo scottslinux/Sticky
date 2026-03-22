@@ -231,7 +231,7 @@ void Sticky::savetoRender()
 
         mybutton.value=true;    //try resetting the button
         state=state_::display;
-        mybutton.value=false;is
+        mybutton.value=false;
 
         
 
