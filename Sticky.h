@@ -16,6 +16,7 @@ class Sticky
 {
 private:
     static Texture2D notepic;
+
     Texture2D corkboard;
     Texture2D buttonup;
     Texture2D buttondown;
@@ -23,7 +24,9 @@ private:
     RenderTexture2D noteimage;
 
     Button mybutton;
-    
+    Color notecolor;
+    float noterotation;
+    vector<Color> stickycolor;
     
     struct notestruct
     {   //data for each note
@@ -39,7 +42,7 @@ private:
 
     //------------------------------------------------
     //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
-    enum class state_{initialize,idle,create,deleting};
+    enum class state_{initialize,display,create,deleting};
 
     state_ state=state_::initialize;
     
@@ -57,6 +60,11 @@ public:
 
     void savetoRender();
     void switchBoard();
+    void display_draw();
+    void display_update();
+    void create_draw();
+    void create_update();
+    
 
 };
 

@@ -24,6 +24,7 @@ private:
     Vector2 cursorpixxy;
 
     float cursortimer=0;
+    bool cursorpauseflag=false;
 
     int charcount;
     int changesmade=0;
@@ -57,5 +58,6 @@ public:
     string wrapper(string workingstr,int width);
     string getTextString();
     void cleartextbox();
+    void pauseCursor();
 
 };

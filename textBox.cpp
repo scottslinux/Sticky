@@ -124,7 +124,7 @@ void TextBox::draw()
 
 
         
-        drawCursor(0,0);
+        //drawCursor(0,0);
 
         //cout<<tempstring<<endl;
 
@@ -165,7 +165,8 @@ void TextBox::getSomeKeyStrokes()
 
 void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
 {
-    if(cursorpixxy.x==0) return;
+
+    if (cursorpauseflag) return;    //blank it for the snapshot
 
     cursortimer+=GetFrameTime();    //increment the counter
 
@@ -291,4 +292,12 @@ string TextBox::getTextString()
 void TextBox::cleartextbox()
 {
     text="";
+}
+//***************************************************************/
+void TextBox::pauseCursor()
+{
+
+    cursorpauseflag=(cursorpauseflag==false) ? true : false ;
+
+
 }

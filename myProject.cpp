@@ -23,7 +23,8 @@ int main()
 
         ClearBackground(Color{0,100,50,255});
 
-        myNote.draw();
+        myNote.switchBoard();   //state machine control
+        //myNote.draw();
 
 
 
