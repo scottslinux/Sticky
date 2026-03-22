@@ -55,5 +55,7 @@ public:
     void getSomeKeyStrokes();
     void drawCursor(float col,float row);
     string wrapper(string workingstr,int width);
+    string getTextString();
+    void cleartextbox();
 
 };

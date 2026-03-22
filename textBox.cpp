@@ -10,8 +10,7 @@
 using namespace std;
 
 
-//*******************************************
-TextBox::TextBox() : TextBox({11,4},{120,100},45) {}
+
 //*******************************************
 TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
 {
@@ -66,8 +65,8 @@ void TextBox::update()
 //*******************************************
 void TextBox::draw()
 {
-    DrawRectangleLinesEx({boxposition.x,(float)boxposition.y-fontheight*.5,
-            (float)boxpixels.x*.6,boxpixels.y+fontwidth*2},1,BLUE);
+   // DrawRectangleLinesEx({boxposition.x,(float)boxposition.y-fontheight*.5,
+    //        (float)boxpixels.x*.6,boxpixels.y+fontwidth*2},1,BLUE);
 
     
         int row=0,col=0;
@@ -166,6 +165,8 @@ void TextBox::getSomeKeyStrokes()
 
 void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
 {
+    if(cursorpixxy.x==0) return;
+
     cursortimer+=GetFrameTime();    //increment the counter
 
     if (cursortimer>0.50)   //if it has been x seconds..change the state of the cursor from one to the other
@@ -279,4 +280,15 @@ string TextBox::wrapper(string workingstr,int width)
 
 
     return workingstr;
+}
+//********************************************************** */
+
+string TextBox::getTextString()
+{
+    return text;
+}
+//********************************************************** */
+void TextBox::cleartextbox()
+{
+    text="";
 }

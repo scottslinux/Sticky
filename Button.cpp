@@ -67,19 +67,21 @@ bool Button::update()
 
 
     if (CheckCollisionPointCircle(GetMousePosition(),center,100)
-            && IsMouseButtonDown(MOUSE_BUTTON_LEFT)&& !timerflag)
-                {
-                    value=true;
+            && IsMouseButtonDown(MOUSE_BUTTON_LEFT)&&!timerflag)
+                {   
+                    if(value)
+                        value=false;
+                        else
+                            value=true;
+
                     if(!IsSoundPlaying(click))
                         PlaySound(click);
-                    timerflag=true;
-
+                        timerflag=true;
+                    
                 }
-                    else    
-                    if (!timerflag)
-                    {
-                        value=false;
-                    }
+                
+
+
 
     if (CheckCollisionPointCircle(GetMousePosition(),center,100)
             && IsMouseButtonDown(MOUSE_BUTTON_LEFT)&& IsKeyDown(KEY_LEFT_SHIFT))
@@ -89,8 +91,9 @@ bool Button::update()
 
             }
 
-    if (timerflag)
-            clicktimer();
+    
+            if (timerflag)
+                clicktimer();
 
     return value;
 }
@@ -102,18 +105,16 @@ void Button::draw()
     DrawTextureEx(activetexture,{location.x,location.y},0,buttonscale,WHITE);
     
     if(value)
-        DrawTextEx(pencil,"Creating...",{location.x+button_off.width*buttonscale,location.y},30,0,BLACK);
+        DrawTextEx(pencil,"Post...",{location.x+button_off.width*buttonscale,location.y+20},30,0,WHITE);
         else
-            DrawTextEx(pencil,"Create Note",{location.x+button_off.width*buttonscale,location.y+20},30,0,BLACK);
+            DrawTextEx(pencil,"New Note",{location.x+button_off.width*buttonscale,location.y+20},30,0,WHITE);
 
 Vector2 center;
     center.x=button_off.width/2+location.x;
     center.y=button_off.height/2+location.y;
 
 
-    //DrawRectangleLines(location.x,location.y,
-     //       buttonscale*button_off.width,buttonscale*button_off.height,BLUE);
-
+    
 
     return;
 }

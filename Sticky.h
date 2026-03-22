@@ -35,15 +35,15 @@ private:
     };
     
     vector<notestruct> notelist;
-    vector<RenderTexture2D> ImageList;
+    vector<Texture2D> ImageList;
 
-
+    //------------------------------------------------
     //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
-    enum class state_{initialize,idle,creating,deleting};
+    enum class state_{initialize,idle,create,deleting};
 
     state_ state=state_::initialize;
     
-    
+    //------------------------------------------------
     
     TextBox inputbox;
 
@@ -56,6 +56,7 @@ public:
     void draw();
 
     void savetoRender();
+    void switchBoard();
 
 };
 
