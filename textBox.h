@@ -17,6 +17,7 @@ private:
     int fontsize;
     int fontwidth,fontheight;
     int margin;                 //margin around the text to the rectangle
+    int lines=0;
 
     Vector2 boxdimen;           //horizontal x vertical character counts
     Vector2 boxpixels;          //corresponding pixel dimensions
@@ -59,5 +60,7 @@ public:
     string getTextString();
     void cleartextbox();
     void pauseCursor();
+    void resetLines();
+    int countlinesbreaks();
 
 };

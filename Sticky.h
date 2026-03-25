@@ -20,6 +20,7 @@ private:
     Texture2D corkboard;
     Texture2D buttonup;
     Texture2D buttondown;
+    Texture2D closingX;
 
     RenderTexture2D noteimage;
 
@@ -27,6 +28,7 @@ private:
     Color notecolor;
     float noterotation;
     vector<Color> stickycolor;
+    float notescale=0.25;
     
     struct notestruct
     {   //data for each note
@@ -34,6 +36,7 @@ private:
         Color notecol{100,100,100,255};
         float rotation=0;
         string notemsg;
+        Rectangle targetrect;
 
     };
     
@@ -42,9 +45,9 @@ private:
 
     //------------------------------------------------
     //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
-    enum class state_{initialize,display,create,deleting};
+    enum class States{initialize,display,create,deleting};
 
-    state_ state=state_::initialize;
+    States state=States::initialize;
     
     //------------------------------------------------
     
@@ -64,6 +67,8 @@ public:
     void display_update();
     void create_draw();
     void create_update();
+    void deleting_update();
+    void deleting_draw();
     
 
 };

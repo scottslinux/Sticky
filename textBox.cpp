@@ -14,7 +14,10 @@ using namespace std;
 //*******************************************
 TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
 {
-    MonoFont=LoadFontEx("./resources/marker.ttf",50,NULL,0);
+    MonoFont=LoadFontEx("./resources/marker.ttf",100,NULL,0);
+    SetTextureFilter(MonoFont.texture,TEXTURE_FILTER_BILINEAR);
+
+
     fontsize=fntsz;
     cursorpixxy={0,0};     
     
@@ -54,10 +57,12 @@ TextBox::~TextBox()
 //*******************************************
 void TextBox::update()
 {
+    
         TextBox::getSomeKeyStrokes();
+        cout<<"lines: "<<countlinesbreaks()<<endl;
 
     
-        
+    
     
 
 
@@ -107,7 +112,7 @@ void TextBox::draw()
                 fontposx+=MeasureTextEx(MonoFont,prevchar.c_str(),fontsize,0).x;   //tally up the spacing in realtime
 
 
-                DrawTextEx(MonoFont,a.c_str(),{boxposition.x+(fontposx),boxposition.y+(row*fontheight)},fontsize,0,BLACK);
+                DrawTextEx(MonoFont,a.c_str(),{boxposition.x+(fontposx)+25,boxposition.y+(row*fontheight)+25},fontsize,0,BLACK);
                 col++;
 
                 cursorpixxy={boxposition.x+(fontposx),boxposition.y+(row*fontheight)};
@@ -140,7 +145,6 @@ void TextBox::getSomeKeyStrokes()
     //thanks Copilot--add the keystrokes to the string text
 
 
-    
 
     int key = GetCharPressed();
 
@@ -210,10 +214,12 @@ void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
 //  Here is the pure word wrap function....let's see
 string TextBox::wrapper(string workingstr,int width)
 {
+
+
+
     int charcount=0;
     int changes=0;
-    int lines=1;
-
+    
     for (int i=0;i<workingstr.length();i++)
     {
         if(charcount==width)    //you are at the end (width*lines keeps the party going!)
@@ -221,7 +227,6 @@ string TextBox::wrapper(string workingstr,int width)
             if(workingstr[i]==10)   //if parser encounters a native RETURN
             {
                 charcount=-1;   //start the counter at 0 -i will iterate to next character
-                lines++;
                 changes++;
 
 
@@ -234,7 +239,6 @@ string TextBox::wrapper(string workingstr,int width)
             {
                 workingstr[i]=10;
                 charcount=-1;    //reset the width counter. it will inc to 0 after loop
-                lines++;
                 changes++;
 
                 
@@ -252,7 +256,6 @@ string TextBox::wrapper(string workingstr,int width)
                         charcount=-1;  //reset the width counter. it will inc to 0 after loop
                         changes++;
                         i=j+1; //go back on character in the count to start fresh on new line
-                        lines++;
                         
 
 
@@ -269,7 +272,6 @@ string TextBox::wrapper(string workingstr,int width)
 
         }
         
-        cout<<lines<<endl;
 
 
     
@@ -301,3 +303,27 @@ void TextBox::pauseCursor()
 
 
 }
+//***************************************************************/
+
+void TextBox::resetLines()
+{
+    lines=0;
+}
+//***************************************************************/
+
+int TextBox::countlinesbreaks()
+{
+    int linebrk=0;
+
+    for(char c:tempstring)
+        {
+            if(c==10)
+            linebrk++;
+        }
+
+
+    return linebrk;
+
+
+}
+//***************************************************************/
