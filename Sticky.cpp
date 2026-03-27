@@ -16,14 +16,14 @@ Texture2D Sticky::notepic{};    //initialize the static
 
 Sticky::Sticky():mybutton({550,700},.07),inputbox({10,4},{30,10},130)
 {
-    notepic=LoadTexture("./resources/stickypic.png");
+    notepic=LoadTexture("resources/stickypic.png");
     
     
     noteimage=LoadRenderTexture(notepic.width,notepic.height);
-    corkboard=LoadTexture("./resources/corkboard.png");
-    closingX=LoadTexture("./resources/closingX.png");
+    corkboard=LoadTexture("resources/corkboard.png");
+    closingX=LoadTexture("resources/closingX.png");
 
-    utility=LoadFont("./resources/pencil.ttf");
+    utility=LoadFontEx("resources/pencil.ttf",80,0,NULL);
 
     state=States::initialize;  //starting state for the moment
 
@@ -67,6 +67,9 @@ void Sticky::switchBoard()
             state=States::display;
             cout<<"vector lenght: "<<notelist.size()<<endl;
         }
+        savereadflag=true;
+        operationString="LOADING...";
+
         
         break;
     //---------------------------
@@ -86,8 +89,12 @@ void Sticky::switchBoard()
     //---------------------------
       
     case States::display:
+
+        
         display_update();
         display_draw();    
+        if(savereadflag)
+                save_readGraphic(operationString);  //play the graphic load bar
 
 
         break;
@@ -125,7 +132,7 @@ void Sticky::display_update()
             notecolor=stickycolor[i];    //choose a random color from the 4 for the new note
             noterotation=rand()%30 + -15;
 
-            SetMousePosition(300,800);
+            SetMousePosition(300,780);
 
             cout<<"dispay update....create button seems pressed...fix value\n";
  
@@ -192,7 +199,8 @@ void Sticky::display_draw()
 
     vector<string> verbosestate={"initialize","display","create","deleting","aborting"};
     //cout<<"state: "<<verbosestate[static_cast<int>(state)]<<endl;
-    DrawTextEx(utility,verbosestate[static_cast<int>(state)].c_str(),{600,750},60,0,BLACK);
+    string currstate="mode: "+verbosestate[static_cast<int>(state)];
+    DrawTextEx(utility,currstate.c_str(),{400,770},40,0,WHITE);
 
 
 
@@ -205,10 +213,16 @@ void Sticky::create_draw()
     
     display_draw(); //draw the background and any existing notes
 
-    DrawCircle(300,700,15,RED);
-    DrawRing({300,700},13,17,0,360,999,WHITE);
+    
+    DrawCircle(308,780,20,BLACK);
+    DrawCircle(300,780,15,GREEN);
+    DrawRing({300,780},13,20,0,360,100,LIGHTGRAY);
+    DrawRing({300,780},10,13,0,360,100,DARKGREEN);
+    DrawCircle(305,775,4,Color{255,255,255,150});
     //don't draw the button 
     DrawTextureEx(closingX,{500,200},0,.08,WHITE);
+
+    
 
     savetoRender();
 
@@ -220,7 +234,8 @@ void Sticky::create_draw()
 void Sticky::create_update()
 {
     //Abort the creation of a note and delete it
-    if(CheckCollisionPointCircle(GetMousePosition(),{500,200},50)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    //DrawCircle(540,245,30,WHITE);
+    if(CheckCollisionPointCircle(GetMousePosition(),{540,245},25)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         state=States::aborting;
         SetMousePosition(100,300);
@@ -277,7 +292,7 @@ void Sticky::savetoRender()
     EndTextureMode();
 
     //this is the button sensing routine for the save note procedure
-    if(CheckCollisionPointCircle(GetMousePosition(),{300,700},20)&&
+    if(CheckCollisionPointCircle(GetMousePosition(),{308,780},20)&&
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&state==States::create)    //button has been pressed again-->post it!
     {
         changesmade=true;   //will signal a write to file operation
@@ -346,6 +361,8 @@ void Sticky::deleting_update()
             ImageList.erase(ImageList.begin()+i);
 
                 state=States::display;
+            savereadflag=true;
+            operationString="DELETING...";
 
         }
         else
@@ -374,6 +391,9 @@ void Sticky::deleting_draw()
 
 void Sticky::save2File()    //write it out to a file
 {
+    savereadflag=true;
+    operationString="SAVING....";
+
     string path="./resources/data.txt";
     ofstream outfile(path);
     if(outfile.is_open())
@@ -458,5 +478,24 @@ inputbox.cleartextbox();    //clear the note text out so we start clean
 
 
     
+
+}
+//---------------------------------------------------------------
+void Sticky::save_readGraphic(string title)
+{
+    animTimer+=GetFrameTime();
+    if(animTimer<2)
+    {
+        DrawTextEx(utility,title.c_str(),{150,700},50,0,WHITE);
+        DrawRectangleRounded({100,750,300,10},1,100,WHITE);
+        DrawRectangleRounded({100,750,(300*animTimer/2),10},1,100,GREEN);
+
+    }
+    else
+        {
+            animTimer=0;
+            savereadflag=false;
+        }
+
 
 }

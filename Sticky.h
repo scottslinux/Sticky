@@ -32,8 +32,12 @@ private:
     float noterotation;
     vector<Color> stickycolor;
     float notescale=0.25;
+
+    float animTimer=0;
     bool abortingFlag=false;
     bool changesmade=false;
+    bool savereadflag=false;
+    string operationString;
     
     
 
@@ -78,6 +82,8 @@ public:
     void deleting_draw();
     void save2File();
     void readfromFile();
+
+    void save_readGraphic(string);
     
 
 };

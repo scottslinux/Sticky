@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Sticky
+Comment=Sticky Notes App
+Exec=/home/scott/GitHub_Projects/Sticky/myProject
+Path=/home/scott/GitHub_Projects/Sticky
+Icon=/home/scott/GitHub_Projects/Sticky/resources/StickyIcon.png
+Terminal=false
+Type=Application
+Categories=Utility;

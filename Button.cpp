@@ -25,10 +25,10 @@ Button::Button(Vector2 loc, float scale)
     {
         cout<<"Loading the resources.....\n";
 
-        button_off=LoadTexture("./resources/button_up.png");
-        button_on=LoadTexture("./resources/button_pressed.png");
-        pencil=LoadFontEx("./resources/Inter.ttf",50,0,0);
-        click=LoadSound("./resources/click.wav");
+        button_off=LoadTexture("resources/button_up.png");
+        button_on=LoadTexture("resources/button_pressed.png");
+        pencil=LoadFontEx("resources/Inter.ttf",50,0,0);
+        click=LoadSound("resources/click.wav");
 
         resourceguard=true;
     }

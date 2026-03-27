@@ -1,5 +1,4 @@
-229 232 23 255 "new notes" 100 100 10 
-255 201 252 255 "save2file method" 100 100 -11 
-229 232 23 255 "And we start clean" 100 100 7 
-229 232 23 255 "but there are always edge cases" 100 100 -8 
-141 232 23 255 "who knows where???" 100 100 6 
+255 201 252 255 "Going to Dinner with Finn and Sarah" 100 100 -5 
+229 232 23 255 "On Call Monday. Patelx2 CABGs" 100 100 7 
+229 232 23 255 "ACLS Renewal  Due 12/26" 100 100 -6 
+141 232 23 255 "Book PTO with reduced Time prog." 100 100 -14 

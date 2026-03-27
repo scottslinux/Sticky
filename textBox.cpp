@@ -14,7 +14,7 @@ using namespace std;
 //*******************************************
 TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
 {
-    MonoFont=LoadFontEx("./resources/marker.ttf",100,NULL,0);
+    MonoFont=LoadFontEx("resources/marker.ttf",100,NULL,0);
     SetTextureFilter(MonoFont.texture,TEXTURE_FILTER_BILINEAR);
 
 

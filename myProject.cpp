@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "raylib.h"
 #include "Sticky.h"
 
@@ -8,6 +9,10 @@ using namespace std;
 
 int main()
 {
+
+    chdir("/home/scott/GitHub_Projects/Sticky");
+
+
     cout<<" Testing again.....\n";
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);  //prevents aliasing
