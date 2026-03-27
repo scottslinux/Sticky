@@ -170,7 +170,7 @@ void Sticky::display_draw()
                 }
 
                 //DrawRectangleLinesEx(recdest,4,RED);
-                DrawText(to_string(i).c_str(),recdest.x,recdest.y,30,WHITE);
+                //DrawText(to_string(i).c_str(),recdest.x,recdest.y,30,WHITE);
 
 
                 
@@ -348,6 +348,14 @@ void Sticky::deleting_update()
                 state=States::display;
 
         }
+        else
+            if(CheckCollisionPointRec(GetMousePosition(),notelist[i].targetrect)&&GetMouseWheelMove())
+            {
+                notelist[i].rotation+=(GetMouseWheelMove());
+                
+                if(!IsKeyDown(KEY_LEFT_SHIFT))  //end the rotation and return to 
+                    state=States::display;
+            }
     }
 
     
@@ -446,7 +454,7 @@ for(auto c:notelist)
 
 
 }
-
+inputbox.cleartextbox();    //clear the note text out so we start clean
 
 
     

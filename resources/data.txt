@@ -1,3 +1,5 @@
 229 232 23 255 "new notes" 100 100 10 
-141 232 23 255 "better formatting" 100 100 -7 
 255 201 252 255 "save2file method" 100 100 -11 
+229 232 23 255 "And we start clean" 100 100 7 
+229 232 23 255 "but there are always edge cases" 100 100 -8 
+141 232 23 255 "who knows where???" 100 100 6 
