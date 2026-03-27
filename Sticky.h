@@ -8,6 +8,7 @@
 #include <vector>
 #include "textBox.h"
 #include "Button.h"
+#include <fstream>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ private:
     Texture2D buttondown;
     Texture2D closingX;
 
+    Font utility;
+
     RenderTexture2D noteimage;
 
     Button mybutton;
@@ -29,6 +32,23 @@ private:
     float noterotation;
     vector<Color> stickycolor;
     float notescale=0.25;
+    bool abortingFlag=false;
+    bool changesmade=false;
+    
+    
+
+    //------------------------------------------------
+    //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
+    enum class States{initialize,display,create,deleting,aborting};
+
+    States state=States::initialize;
+    
+    //------------------------------------------------
+    
+    TextBox inputbox;
+
+
+public:
     
     struct notestruct
     {   //data for each note
@@ -43,19 +63,6 @@ private:
     vector<notestruct> notelist;
     vector<Texture2D> ImageList;
 
-    //------------------------------------------------
-    //     ⁡⁣⁣⁢𝗘𝗡𝗨𝗠 𝗖𝗟𝗔𝗦𝗦 𝗦𝗧𝗔𝗧𝗘𝗦⁡
-    enum class States{initialize,display,create,deleting};
-
-    States state=States::initialize;
-    
-    //------------------------------------------------
-    
-    TextBox inputbox;
-
-
-public:
-    
     Sticky(/* args */);
     ~Sticky();
 
@@ -69,6 +76,8 @@ public:
     void create_update();
     void deleting_update();
     void deleting_draw();
+    void save2File();
+    void readfromFile();
     
 
 };

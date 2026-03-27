@@ -62,5 +62,6 @@ public:
     void pauseCursor();
     void resetLines();
     int countlinesbreaks();
+    void settextString(string);
 
 };

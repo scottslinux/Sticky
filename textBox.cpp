@@ -33,20 +33,7 @@ TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
     boxpixels.x*=boxdimen.x; //total pixels= single char pix * #chars across
     boxpixels.y*=boxdimen.y; //same for the vertical
 
- /*
-    cout<<"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
-    cout<<"char x: "<<boxdimen.x<<endl;
-    cout<<"char y: "<<boxdimen.y<<endl;
-    cout<<"Letter A pixels: "<<MeasureTextEx(MonoFont,test.c_str(),fntsz,0).x<<", "<<
-        MeasureTextEx(MonoFont,test.c_str(),fntsz,0).y<<endl;
-    cout<<"pixels x,y: "<<boxpixels.x<<", "<<boxpixels.y<<endl;
-    cout<<"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
-
-    text="This is a test string that will never in itself change. Reach deep inside of yourself and try not to sink into the void...";
-
-    tempstring=text;  //for testing create a copy of the text string
-*/
-
+ 
 
 }
 //*******************************************
@@ -59,7 +46,7 @@ void TextBox::update()
 {
     
         TextBox::getSomeKeyStrokes();
-        cout<<"lines: "<<countlinesbreaks()<<endl;
+      //  cout<<"lines: "<<countlinesbreaks()<<endl;
 
     
     
@@ -327,3 +314,12 @@ int TextBox::countlinesbreaks()
 
 }
 //***************************************************************/
+//  Let's me set the contents of the text box without manually entering
+
+void TextBox::settextString(string newmsg) //used in repopulating the notes from saved vector
+{
+    text=newmsg;
+
+
+}
+

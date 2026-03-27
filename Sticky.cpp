@@ -1,6 +1,7 @@
 #include "Sticky.h"
 #include "Button.h"
 #include <ctime>
+#include <iomanip>
 
 
 
@@ -22,7 +23,9 @@ Sticky::Sticky():mybutton({550,700},.07),inputbox({10,4},{30,10},130)
     corkboard=LoadTexture("./resources/corkboard.png");
     closingX=LoadTexture("./resources/closingX.png");
 
-    state=States::display;  //starting state for the moment
+    utility=LoadFont("./resources/pencil.ttf");
+
+    state=States::initialize;  //starting state for the moment
 
     stickycolor={Color{141,232,23,255},Color{118,236,232,255},Color{229,232,23,255},Color{255,201,252,255}};
     noterotation=0;
@@ -58,14 +61,20 @@ void Sticky::switchBoard()
     {
 
     case States::initialize:
+        if(!notelist.size())
+        {
+            readfromFile(); //let's see if there is already a list of notes
+            state=States::display;
+            cout<<"vector lenght: "<<notelist.size()<<endl;
+        }
+        
         break;
     //---------------------------
     case States::create:
         
         create_update();
-            if (state==States::display) break;
         create_draw();
-        savetoRender();
+        //savetoRender();
         break;
     //---------------------------
 
@@ -85,20 +94,30 @@ void Sticky::switchBoard()
 
     //---------------------------
 
+    case States::aborting:
 
+        mybutton.value=false;   //turn off the create button
+        abortingFlag=true;
+    
+        cout<<"Fell Through....aborting!!!!!!!\n";
+
+        state=States::display;
+        break;
+    
+    //---------------------------------------
     default:
+
         break;
     }
 
-    vector<string> verbosestate={"initialize","display","create","deleting",};
-    cout<<"state: "<<verbosestate[static_cast<int>(state)]<<endl;
-
+    
 }
 
 //-------------------------------------------
 
 void Sticky::display_update()
 {
+    //check for create button to be pressed. Change state display-->create
     if(mybutton.update()==true && state==States::display && notelist.size()<9) //button pressed to start creating
         {
             state=States::create;
@@ -107,6 +126,8 @@ void Sticky::display_update()
             noterotation=rand()%30 + -15;
 
             SetMousePosition(300,800);
+
+            cout<<"dispay update....create button seems pressed...fix value\n";
  
         }
         
@@ -141,7 +162,14 @@ void Sticky::display_draw()
 
                 notelist[i].targetrect=recdest; //register the position in the list for collision
 
-                DrawRectangleLinesEx(recdest,4,RED);
+                if(changesmade)
+                {
+                    changesmade=false;
+                    save2File();    //write the vector out to a file
+
+                }
+
+                //DrawRectangleLinesEx(recdest,4,RED);
                 DrawText(to_string(i).c_str(),recdest.x,recdest.y,30,WHITE);
 
 
@@ -162,6 +190,9 @@ void Sticky::display_draw()
 
             if(state==States::display && notelist.size()<9) mybutton.draw(); //only draw the button when in display state
 
+    vector<string> verbosestate={"initialize","display","create","deleting","aborting"};
+    //cout<<"state: "<<verbosestate[static_cast<int>(state)]<<endl;
+    DrawTextEx(utility,verbosestate[static_cast<int>(state)].c_str(),{600,750},60,0,BLACK);
 
 
 
@@ -170,14 +201,7 @@ void Sticky::display_draw()
 //-------------------------------------------
 void Sticky::create_draw()
 {
-    if(CheckCollisionPointCircle(GetMousePosition(),{500,200},50)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        state=States::display;
-        SetMousePosition(100,300);
-
-        return;
     
-    }
     
     display_draw(); //draw the background and any existing notes
 
@@ -186,14 +210,26 @@ void Sticky::create_draw()
     //don't draw the button 
     DrawTextureEx(closingX,{500,200},0,.08,WHITE);
 
+    savetoRender();
+
+
 
 
 }
 //-------------------------------------------
 void Sticky::create_update()
 {
+    //Abort the creation of a note and delete it
+    if(CheckCollisionPointCircle(GetMousePosition(),{500,200},50)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        state=States::aborting;
+        SetMousePosition(100,300);
+        cout<<"confirm press.....\n";
+
+        return;
     
-        savetoRender();
+    }
+       
 
 }
 
@@ -204,7 +240,7 @@ void Sticky::create_update()
 void Sticky::draw()
 {
 
-  
+  //replaced by switchboard and specific drawing routines based on state
 
 
 
@@ -218,6 +254,17 @@ void Sticky::draw()
 
 void Sticky::savetoRender()
 {
+    if (abortingFlag)   //we bailed out of the last note...so clear the text
+    {
+        //clear the textbox
+        inputbox.cleartextbox();
+        abortingFlag=false; //reset the flag
+
+
+
+
+
+    }
     //first draw to render texture and then display it to the screen
     BeginTextureMode(noteimage);
     
@@ -229,20 +276,25 @@ void Sticky::savetoRender()
 
     EndTextureMode();
 
-
+    //this is the button sensing routine for the save note procedure
     if(CheckCollisionPointCircle(GetMousePosition(),{300,700},20)&&
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&state==States::create)    //button has been pressed again-->post it!
     {
+        changesmade=true;   //will signal a write to file operation
+
         cout<<"Time to post!!!\n";
         state=States::display;
 
         
 
         notestruct tempnote;
-        tempnote.notecol=WHITE;
-        tempnote.notemsg="hello";
+        tempnote.notecol=notecolor;
+        tempnote.notemsg=inputbox.getTextString();
         tempnote.posxy={100,100};
         tempnote.rotation=noterotation;
+        //don't need the rectangle since it is dynamically positioned
+        
+
 
 
         notelist.emplace_back(tempnote);
@@ -278,7 +330,9 @@ void Sticky::savetoRender()
 
 
 
+    cout<<notelist.size()<<endl;
 
+    save2File();
 }
 //--------------------------------------------------------------
 void Sticky::deleting_update()
@@ -305,4 +359,96 @@ void Sticky::deleting_draw()
     display_draw();
 
     
+}
+//---------------------------------------------------------------
+
+//      ⁡⁣⁣⁢​‌‌‍𝗪𝗿𝗶𝘁𝗲 𝘁𝗵𝗲 𝗘𝘅𝗶𝘀𝘁𝗶𝗻𝗴 𝗡𝗼𝘁𝗲𝘀 𝘁𝗼 𝗮 𝗙𝗶𝗹𝗲​⁡
+
+void Sticky::save2File()    //write it out to a file
+{
+    string path="./resources/data.txt";
+    ofstream outfile(path);
+    if(outfile.is_open())
+            cout<<"file opened successfully for write operation.\n";
+            else
+                cout<<"FAILED TO OPEN FILE FOR WRITE!!!\n";
+
+    for(const auto& c:notelist)
+    {
+        //convert the colors to integers so they can be read back
+        outfile
+        <<(int)c.notecol.r<<' '<<(int)c.notecol.g<<' '<<(int)c.notecol.b<<' '<<(int)c.notecol.a
+        <<' '<<std::quoted(c.notemsg)
+        <<' '<<c.posxy.x<<' '<<c.posxy.y
+        <<' '<<c.rotation<<' '
+        <<'\n';
+
+
+    }
+
+    outfile.close();
+            
+}
+//---------------------------------------------------------------
+void Sticky::readfromFile()
+{
+    //  ⁡⁣⁣⁢​‌‌‍𝗥𝗲𝘀𝘁𝗼𝗿𝗲 𝘁𝗵𝗲 𝗩𝗲𝗰𝘁𝗼𝗿 𝗳𝗿𝗼𝗺 𝘁𝗵𝗲 𝗦𝗮𝘃𝗲𝗱 𝗡𝗼𝘁𝗲 𝗙𝗶𝗹𝗲​⁡
+    
+    
+    string path="./resources/data.txt";
+    ifstream infile(path);  //if not valid file...get out
+        if (!infile) { std::cerr << "FAILED TO OPEN FILE FOR READ!!!\n"; return; }
+            else
+                cout<<"there is a valid file and it is being opened....\n";
+
+    notestruct tempnote;
+
+    notelist.clear();   //clear the existing list
+
+  int r,g,b,a;
+
+  while(infile
+            >>r>>g>>b>>a
+            >>std::quoted(tempnote.notemsg)
+            >>tempnote.posxy.x
+            >>tempnote.posxy.y
+            >>tempnote.rotation)
+    {
+        
+        tempnote.notecol={ (unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a };
+        notelist.push_back(tempnote);
+    }
+//vector has been populated. Now time to create the images
+
+for(auto c:notelist)
+{
+    BeginTextureMode(noteimage);
+    
+        ClearBackground(BLANK);
+        DrawTextureEx(notepic,{0,0},0,1,c.notecol); //create full sized noteimage with large font
+        inputbox.settextString(c.notemsg);
+        inputbox.update();
+        
+        inputbox.draw();
+
+    EndTextureMode();
+
+
+    Image snapshot=LoadImageFromTexture(noteimage.texture);
+        ImageFlipVertical(&snapshot);
+        Texture2D savedNote=LoadTextureFromImage(snapshot);
+        UnloadImage(snapshot);
+
+        ImageList.push_back(savedNote); //push the image onto the ImageList vector
+
+    
+
+
+
+}
+
+
+
+    
+
 }
