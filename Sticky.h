@@ -9,6 +9,7 @@
 #include "textBox.h"
 #include "Button.h"
 #include <fstream>
+#include "FireWorks.h"
 
 using namespace std;
 
@@ -38,6 +39,8 @@ private:
     bool changesmade=false;
     bool savereadflag=false;
     string operationString;
+
+    FireWorks shot; //create object for fireworks effect
     
     
 

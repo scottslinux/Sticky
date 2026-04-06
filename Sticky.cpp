@@ -202,7 +202,7 @@ void Sticky::display_draw()
     string currstate="mode: "+verbosestate[static_cast<int>(state)];
     DrawTextEx(utility,currstate.c_str(),{400,770},40,0,WHITE);
 
-
+    shot.FireAnimate(); //will only animate if shot active. (logic inside of method)
 
 }
 
@@ -356,13 +356,19 @@ void Sticky::deleting_update()
     {
         if(CheckCollisionPointRec(GetMousePosition(),notelist[i].targetrect)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
+            
+            shot.reloadRound(300,GetMousePosition(),notelist[i].notecol);
+            shot.fire();
+
             cout<<"******DELETING****    "<<i<<endl;
             notelist.erase(notelist.begin()+i);
             ImageList.erase(ImageList.begin()+i);
 
-                state=States::display;
+
+            state=States::display;
             savereadflag=true;
             operationString="DELETING...";
+            save2File();
 
         }
         else
