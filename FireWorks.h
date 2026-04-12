@@ -12,6 +12,8 @@ private:
     int numfrags=0;
     float blstTimer=0;
     Color shotColor;
+
+    Sound bling;
     
 
     Vector2 blstcntr={0,0};

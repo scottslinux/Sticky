@@ -17,6 +17,8 @@ TextBox::TextBox(Vector2 chrdim,Vector2 screenpos,int fntsz)
     MonoFont=LoadFontEx("resources/marker.ttf",100,NULL,0);
     SetTextureFilter(MonoFont.texture,TEXTURE_FILTER_BILINEAR);
 
+    typing=LoadSound("resources/typing.wav");
+
 
     fontsize=fntsz;
     cursorpixxy={0,0};     
@@ -47,6 +49,8 @@ void TextBox::update()
     
         TextBox::getSomeKeyStrokes();
       //  cout<<"lines: "<<countlinesbreaks()<<endl;
+
+      
 
     
     
@@ -138,10 +142,14 @@ void TextBox::getSomeKeyStrokes()
     while (key > 0) {
         text.push_back(static_cast<char>(key));
         key = GetCharPressed();
+        PlaySound(typing);
+        
+            
     }
 
     if (IsKeyPressed(KEY_BACKSPACE) && !text.empty()) {
         text.pop_back();
+        PlaySound(typing);
     }
 
     if(IsKeyPressed(KEY_ENTER))

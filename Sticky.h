@@ -24,7 +24,9 @@ private:
     Texture2D buttondown;
     Texture2D closingX;
 
-    Font utility;
+    
+
+    Font utility,msgfont;
 
     RenderTexture2D noteimage;
 

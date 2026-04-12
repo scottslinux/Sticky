@@ -24,6 +24,9 @@ Sticky::Sticky():mybutton({550,700},.07),inputbox({10,4},{30,10},130)
     closingX=LoadTexture("resources/closingX.png");
 
     utility=LoadFontEx("resources/pencil.ttf",80,0,NULL);
+    msgfont=LoadFontEx("resources/marker.ttf",80,0,NULL);
+
+    
 
     state=States::initialize;  //starting state for the moment
 
@@ -197,10 +200,10 @@ void Sticky::display_draw()
 
             if(state==States::display && notelist.size()<9) mybutton.draw(); //only draw the button when in display state
 
-    vector<string> verbosestate={"initialize","display","create","deleting","aborting"};
+   // vector<string> verbosestate={"initialize","display","create","deleting","aborting"};
     //cout<<"state: "<<verbosestate[static_cast<int>(state)]<<endl;
-    string currstate="mode: "+verbosestate[static_cast<int>(state)];
-    DrawTextEx(utility,currstate.c_str(),{400,770},40,0,WHITE);
+   // string currstate="mode: \ntest"+verbosestate[static_cast<int>(state)];
+  //  DrawTextEx(utility,currstate.c_str(),{400,700},40,0,WHITE);
 
     shot.FireAnimate(); //will only animate if shot active. (logic inside of method)
 
@@ -214,11 +217,17 @@ void Sticky::create_draw()
     display_draw(); //draw the background and any existing notes
 
     
-    DrawCircle(308,780,20,BLACK);
-    DrawCircle(300,780,15,GREEN);
-    DrawRing({300,780},13,20,0,360,100,LIGHTGRAY);
-    DrawRing({300,780},10,13,0,360,100,DARKGREEN);
-    DrawCircle(305,775,4,Color{255,255,255,150});
+    DrawCircle(308,730,20,BLACK);
+    DrawCircle(300,730,15,GREEN);
+    DrawRing({300,730},13,20,0,360,100,LIGHTGRAY);
+    DrawRing({300,730},10,13,0,360,100,DARKGREEN);
+    DrawCircle(305,725,4,Color{255,255,255,150});
+    string prompt="Post";
+
+    DrawTextEx(msgfont,prompt.c_str(),{348,705},80,0,BLACK);
+    DrawTextEx(msgfont,prompt.c_str(),{345,700},80,0,WHITE);
+
+
     //don't draw the button 
     DrawTextureEx(closingX,{500,200},0,.08,WHITE);
 
@@ -234,7 +243,6 @@ void Sticky::create_draw()
 void Sticky::create_update()
 {
     //Abort the creation of a note and delete it
-    //DrawCircle(540,245,30,WHITE);
     if(CheckCollisionPointCircle(GetMousePosition(),{540,245},25)&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         state=States::aborting;
@@ -291,8 +299,10 @@ void Sticky::savetoRender()
 
     EndTextureMode();
 
-    //this is the button sensing routine for the save note procedure
-    if(CheckCollisionPointCircle(GetMousePosition(),{308,780},20)&&
+        inputbox.drawCursor(0,0);
+
+    //this is the button sensing routine for the ⁡⁣⁢⁣𝘀𝗮𝘃𝗲 𝗻𝗼𝘁𝗲⁡ procedure
+    if(CheckCollisionPointCircle(GetMousePosition(),{308,730},20)&&
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&state==States::create)    //button has been pressed again-->post it!
     {
         changesmade=true;   //will signal a write to file operation
@@ -492,7 +502,8 @@ void Sticky::save_readGraphic(string title)
     animTimer+=GetFrameTime();
     if(animTimer<2)
     {
-        DrawTextEx(utility,title.c_str(),{150,700},50,0,WHITE);
+        DrawTextEx(msgfont,title.c_str(),{152,703},50,0,BLACK);
+        DrawTextEx(msgfont,title.c_str(),{150,700},50,0,WHITE);
         DrawRectangleRounded({100,750,300,10},1,100,WHITE);
         DrawRectangleRounded({100,750,(300*animTimer/2),10},1,100,GREEN);
 

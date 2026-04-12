@@ -8,6 +8,8 @@ FireWorks::FireWorks()
     blstcntr={400,400};
     shotColor=Color{YELLOW};
 
+    bling=LoadSound("resources/bling.wav");
+
 
 
 }
@@ -93,7 +95,9 @@ void FireWorks::FireAnimate()
         c.color.a = static_cast<unsigned char>(c.opacity < 0 ? 0 : c.opacity);
 
         if(c.lifespan>0)
-            DrawCircle(xpos,ypos,8,shotColor);
+            //DrawCircle(xpos,ypos,8,shotColor);
+            DrawRectangle(xpos,ypos,15,15,shotColor);
+
 
         c.xy.x=xpos;
         c.xy.y=ypos;
@@ -121,6 +125,8 @@ void FireWorks::reloadRound(int num,Vector2 pos, Color shotcol)
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FireWorks::fire()
 {
+    while(!IsSoundPlaying(bling))
+        PlaySound(bling);
     fireflag=true;  //intiate the shot
     blstTimer=0;    //reset the timer
 
@@ -128,11 +134,8 @@ bool FireWorks::fire()
 
 }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool FireWorks::shotintheair()
-{
-    return (fireflag);
-}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>but       
+
 
 
 

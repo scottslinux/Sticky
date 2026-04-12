@@ -19,6 +19,8 @@ private:
     int margin;                 //margin around the text to the rectangle
     int lines=0;
 
+    Sound typing;
+
     Vector2 boxdimen;           //horizontal x vertical character counts
     Vector2 boxpixels;          //corresponding pixel dimensions
     Vector2 boxposition;        //position on the screen x,y

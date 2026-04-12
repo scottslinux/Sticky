@@ -27,7 +27,7 @@ Button::Button(Vector2 loc, float scale)
 
         button_off=LoadTexture("resources/button_up.png");
         button_on=LoadTexture("resources/button_pressed.png");
-        pencil=LoadFontEx("resources/Inter.ttf",50,0,0);
+        pencil=LoadFontEx("resources/marker.ttf",50,0,0);
         click=LoadSound("resources/click.wav");
 
         resourceguard=true;
@@ -107,8 +107,11 @@ void Button::draw()
     if(value)
         DrawTextEx(pencil,"Post...",{location.x+button_off.width*buttonscale,location.y+20},30,0,WHITE);
         else
-            DrawTextEx(pencil,"New Note",{location.x+button_off.width*buttonscale,location.y+20},30,0,WHITE);
+        {
+            DrawTextEx(pencil,"New Note",{location.x+button_off.width*buttonscale+3,location.y+5},50,0,BLACK);
+            DrawTextEx(pencil,"New Note",{location.x+button_off.width*buttonscale,location.y},50,0,WHITE);
 
+        }
 Vector2 center;
     center.x=button_off.width/2+location.x;
     center.y=button_off.height/2+location.y;
