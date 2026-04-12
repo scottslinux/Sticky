@@ -41,6 +41,7 @@ private:
     bool changesmade=false;
     bool savereadflag=false;
     string operationString;
+    bool capturingtext=false;
 
     FireWorks shot; //create object for fireworks effect
     

@@ -120,10 +120,7 @@ void TextBox::draw()
 
 
         
-        //drawCursor(0,0);
-
-        //cout<<tempstring<<endl;
-
+        
    
 }
 
@@ -165,7 +162,7 @@ void TextBox::getSomeKeyStrokes()
 void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
 {
 
-    if (cursorpauseflag) return;    //blank it for the snapshot
+    
 
     cursortimer+=GetFrameTime();    //increment the counter
 
@@ -188,18 +185,26 @@ void TextBox::drawCursor(float x,float y)   //pass the pixel x,y
     switch (cursorblink)
     {
     case true:
-        curscolor=Color{0,0,0,220};
+        curscolor=Color{0,0,0,255};
 
         break;
     case false:
-        curscolor=Color{0,0,0,10};
+        curscolor=Color{0,0,0,0};
         break;
     
     default:
         break;
     }
 
-    DrawRectangle(cursorpixxy.x+fontwidth/1.5,cursorpixxy.y,fontwidth/3,fontheight,curscolor);  //and there you go....
+    cout<<cursorpixxy.x<<"  "<<cursorpixxy.y<<endl;
+
+    if(tempstring.length()==0)  //intialize to the first character
+    {
+        cursorpixxy.x=30;
+        cursorpixxy.y=10;
+    }
+
+    DrawRectangle(cursorpixxy.x+fontwidth,cursorpixxy.y+60,5,fontheight/1.5,curscolor);  //and there you go....
 
 }
 

@@ -228,7 +228,6 @@ void Sticky::create_draw()
     DrawTextEx(msgfont,prompt.c_str(),{345,700},80,0,WHITE);
 
 
-    //don't draw the button 
     DrawTextureEx(closingX,{500,200},0,.08,WHITE);
 
     
@@ -288,6 +287,8 @@ void Sticky::savetoRender()
 
 
     }
+    RenderTexture2D cursorTemp=LoadRenderTexture(notepic.width,notepic.height); //cursor overlay layer
+
     //first draw to render texture and then display it to the screen
     BeginTextureMode(noteimage);
     
@@ -295,19 +296,27 @@ void Sticky::savetoRender()
         DrawTextureEx(notepic,{0,0},0,1,notecolor); //create full sized noteimage with large font
         inputbox.update();
         
-        inputbox.draw();
+        inputbox.draw();  //don't draw the cursor if capturing
 
     EndTextureMode();
 
+    BeginTextureMode(cursorTemp);
+        ClearBackground(BLANK);
         inputbox.drawCursor(0,0);
+    EndTextureMode();
+
+       
 
     //this is the button sensing routine for the ⁡⁣⁢⁣𝘀𝗮𝘃𝗲 𝗻𝗼𝘁𝗲⁡ procedure
     if(CheckCollisionPointCircle(GetMousePosition(),{308,730},20)&&
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&state==States::create)    //button has been pressed again-->post it!
+                                                                                    //cursor is not being shown
     {
+        
+
+
         changesmade=true;   //will signal a write to file operation
 
-        cout<<"Time to post!!!\n";
         state=States::display;
 
         
@@ -348,10 +357,14 @@ void Sticky::savetoRender()
     }
 
 
-    //DrawTextureRec(noteimage.texture,{0,0,(float)noteimage.texture.width/2,-(float)noteimage.texture.height/2},{50,600},WHITE);
         Rectangle recsource={0,0,(float)noteimage.texture.width,-1*(float)noteimage.texture.height};
         Rectangle recdest={(float)50+(noteimage.texture.width*.35),(float)50+noteimage.texture.height*.35,300,300};
         DrawTexturePro(noteimage.texture,recsource,recdest,{0,0},0,notecolor);
+        DrawTexturePro(cursorTemp.texture,recsource,recdest,{0,0},0,notecolor); //draw the cursor overlay
+
+
+       
+
 
 
 

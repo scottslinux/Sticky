@@ -35,7 +35,7 @@ private:
     string text,tempstring;
 
     bool spaceflag, newlineflag;
-    bool cursorblink=false;
+    
     bool changemade=true;   //start off true to visit word wrap
 
     enum class State_{idle,txtentry,reset};
@@ -46,7 +46,9 @@ private:
 
 
 public:
+    bool cursorblink=false;
 
+    
     TextBox();                                             //default constructor
     TextBox(Vector2 chardim,Vector2 screenpos,int fntsz);  //constructor
     ~TextBox(); //destructor
