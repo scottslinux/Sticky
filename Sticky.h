@@ -23,6 +23,9 @@ private:
     Texture2D buttonup;
     Texture2D buttondown;
     Texture2D closingX;
+    RenderTexture2D cursorTemp;
+
+    Sound tada;
 
     
 

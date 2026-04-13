@@ -14,6 +14,7 @@ private:
     Color shotColor;
 
     Sound bling;
+    Sound confetti; //2 alternative sounds for the destruction animation
     
 
     Vector2 blstcntr={0,0};

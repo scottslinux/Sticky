@@ -20,8 +20,11 @@ Sticky::Sticky():mybutton({550,700},.07),inputbox({10,4},{30,10},130)
     
     
     noteimage=LoadRenderTexture(notepic.width,notepic.height);
+    cursorTemp=LoadRenderTexture(notepic.width,notepic.height);
     corkboard=LoadTexture("resources/corkboard.png");
     closingX=LoadTexture("resources/closingX.png");
+
+    tada=LoadSound("resources/tada.wav");
 
     utility=LoadFontEx("resources/pencil.ttf",80,0,NULL);
     msgfont=LoadFontEx("resources/marker.ttf",80,0,NULL);
@@ -42,8 +45,12 @@ Sticky::Sticky():mybutton({550,700},.07),inputbox({10,4},{30,10},130)
 
 Sticky::~Sticky()
 {
-  //  UnloadTexture(notepic);
-   // UnloadRenderTexture(noteimage);
+   UnloadTexture(notepic);
+   UnloadRenderTexture(noteimage);
+   UnloadRenderTexture(cursorTemp);
+   UnloadSound(tada);
+   UnloadFont(msgfont);
+   
    if(corkboard.id!=0)
    {
     UnloadTexture(corkboard);
@@ -287,7 +294,6 @@ void Sticky::savetoRender()
 
 
     }
-    RenderTexture2D cursorTemp=LoadRenderTexture(notepic.width,notepic.height); //cursor overlay layer
 
     //first draw to render texture and then display it to the screen
     BeginTextureMode(noteimage);
@@ -296,10 +302,11 @@ void Sticky::savetoRender()
         DrawTextureEx(notepic,{0,0},0,1,notecolor); //create full sized noteimage with large font
         inputbox.update();
         
-        inputbox.draw();  //don't draw the cursor if capturing
+        inputbox.draw();  
 
     EndTextureMode();
 
+    //Now draw the ⁡⁣⁢⁣𝗰𝘂𝗿𝘀𝗼𝗿 𝗼𝗻 𝗮𝗻 𝗼𝘃𝗲𝗿𝗹𝗮𝘆⁡ to avoid capture
     BeginTextureMode(cursorTemp);
         ClearBackground(BLANK);
         inputbox.drawCursor(0,0);
@@ -312,8 +319,9 @@ void Sticky::savetoRender()
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&state==States::create)    //button has been pressed again-->post it!
                                                                                     //cursor is not being shown
     {
-        
-
+        //   ⁡⁣⁢⁣𝗕𝘂𝘁𝘁𝗼𝗻 𝗵𝗮𝘀 𝗯𝗲𝗲𝗻 𝗽𝗿𝗲𝘀𝘀𝗲𝗱...𝘀𝗮𝘃𝗲 𝘁𝗵𝗲 𝗻𝗼𝘁𝗲 𝗶𝗺𝗮𝗴𝗲 𝗮𝗻𝗱 𝗱𝗲𝘁𝗮𝗶𝗹𝘀⁡   
+        if(!IsSoundPlaying(tada))
+            PlaySound(tada);
 
         changesmade=true;   //will signal a write to file operation
 
@@ -359,7 +367,7 @@ void Sticky::savetoRender()
 
         Rectangle recsource={0,0,(float)noteimage.texture.width,-1*(float)noteimage.texture.height};
         Rectangle recdest={(float)50+(noteimage.texture.width*.35),(float)50+noteimage.texture.height*.35,300,300};
-        DrawTexturePro(noteimage.texture,recsource,recdest,{0,0},0,notecolor);
+        DrawTexturePro(noteimage.texture,recsource,recdest,{0,0},0,notecolor);  //draw the note image
         DrawTexturePro(cursorTemp.texture,recsource,recdest,{0,0},0,notecolor); //draw the cursor overlay
 
 

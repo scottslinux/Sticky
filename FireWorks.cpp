@@ -9,6 +9,7 @@ FireWorks::FireWorks()
     shotColor=Color{YELLOW};
 
     bling=LoadSound("resources/bling.wav");
+    confetti=LoadSound("resources/confetti.wav");
 
 
 
@@ -58,7 +59,7 @@ void FireWorks::FireAnimate()
 {
    if (!fireflag) // if there is no shot in the air, nothing to animate
      {  
-        cout<<"No Shot in the air....\n";
+        
         return;
      }
 
@@ -125,8 +126,8 @@ void FireWorks::reloadRound(int num,Vector2 pos, Color shotcol)
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FireWorks::fire()
 {
-    while(!IsSoundPlaying(bling))
-        PlaySound(bling);
+    while(!IsSoundPlaying(confetti))
+        PlaySound(confetti);
     fireflag=true;  //intiate the shot
     blstTimer=0;    //reset the timer
 
